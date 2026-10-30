@@ -1,0 +1,354 @@
+/* ── Certificate Preview Modal ───────────────────────────────────────────── */
+
+.cert-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.cert-modal-dialog {
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.cert-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cert-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.cert-modal-subtitle {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 4px 0 0 0;
+}
+
+.cert-modal-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.cert-modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+.cert-modal-body {
+  padding: 24px;
+  max-height: calc(85vh - 140px);
+  overflow-y: auto;
+}
+
+/* ── Academic Diploma Container ─────────────────────────────────────────── */
+
+.diploma-frame {
+  background: #ffffff;
+  color: #0f172a;
+  border: 4px solid #0f172a;
+  border-radius: 4px;
+  padding: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.diploma-inner-border {
+  border: 1.5px solid #0d9488;
+  padding: 32px 28px;
+  position: relative;
+  background: #fafaf9;
+  text-align: center;
+}
+
+.corner-accent {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #d97706;
+}
+
+.corner-tl {
+  top: 4px;
+  left: 4px;
+}
+.corner-tr {
+  top: 4px;
+  right: 4px;
+}
+.corner-bl {
+  bottom: 4px;
+  left: 4px;
+}
+.corner-br {
+  bottom: 4px;
+  right: 4px;
+}
+
+.diploma-header {
+  margin-bottom: 20px;
+}
+
+.diploma-crest {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.diploma-institution {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.diploma-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0d9488;
+  letter-spacing: 0.1em;
+  margin-top: 6px;
+}
+
+.diploma-divider {
+  width: 90px;
+  height: 2px;
+  background: #d97706;
+  margin: 12px auto 0 auto;
+}
+
+.diploma-body {
+  margin: 20px 0;
+}
+
+.diploma-certify-text {
+  font-style: italic;
+  font-size: 0.95rem;
+  color: #64748b;
+  margin: 0 0 8px 0;
+}
+
+.diploma-recipient {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.diploma-roll {
+  font-size: 0.9rem;
+  color: #475569;
+  margin: 6px 0 16px 0;
+}
+
+.diploma-statement {
+  font-size: 0.9rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto 8px auto;
+  line-height: 1.4;
+}
+
+.diploma-course {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0d9488;
+  margin: 0 0 8px 0;
+}
+
+.diploma-grade {
+  font-size: 0.95rem;
+  color: #334155;
+  margin: 0 0 6px 0;
+}
+
+.diploma-date {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 12px 0 0 0;
+}
+
+/* ── Diploma Footer with QR ─────────────────────────────────────────────── */
+
+.diploma-footer {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  text-align: left;
+}
+
+.diploma-metadata {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.diploma-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.meta-id {
+  font-size: 0.95rem;
+  color: #0f172a;
+  font-family: monospace;
+}
+
+.meta-hash {
+  font-size: 0.72rem;
+  color: #334155;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+  width: fit-content;
+}
+
+.diploma-badge {
+  font-size: 0.72rem;
+  color: #0d9488;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.diploma-qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.diploma-qr-img {
+  width: 96px;
+  height: 96px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #ffffff;
+  padding: 4px;
+}
+
+.diploma-qr-skeleton {
+  width: 96px;
+  height: 96px;
+  background: #e2e8f0;
+  border-radius: 6px;
+  animation: pulse 1.5s infinite;
+}
+
+.qr-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #0d9488;
+  letter-spacing: 0.05em;
+}
+
+.qr-sublabel {
+  font-size: 0.62rem;
+  color: #64748b;
+}
+
+/* ── Modal Footer Actions ───────────────────────────────────────────────── */
+
+.cert-modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.cert-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .diploma-inner-border {
+    padding: 20px 14px;
+  }
+  .diploma-institution {
+    font-size: 1.15rem;
+  }
+  .diploma-recipient {
+    font-size: 1.35rem;
+  }
+  .diploma-footer {
+    flex-direction: column-reverse;
+    align-items: center;
+    text-align: center;
+  }
+  .diploma-metadata {
+    align-items: center;
+  }
+}

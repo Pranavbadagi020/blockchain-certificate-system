@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: certchain-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: certchain
+    volumes:
+      - certchain-mongo-data:/data/db
+    networks:
+      - certchain-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: certchain-backend
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/certchain
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@certchain.local}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-PranavAdmin@2024}
+      JWT_SECRET: ${JWT_SECRET:-CertChainSuperSecretKeyForJwtSigningMustBeAtLeast256BitsLong2026}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:5173}
+      BLOCKCHAIN_RPC_URL: ${BLOCKCHAIN_RPC_URL:-http://host.docker.internal:8545}
+      BLOCKCHAIN_CONTRACT_ADDRESS: ${BLOCKCHAIN_CONTRACT_ADDRESS:-0x5FbDB2315678afecb367f032d93F642f64180aa3}
+      BLOCKCHAIN_PRIVATE_KEY: ${BLOCKCHAIN_PRIVATE_KEY:-}
+      AI_ANALYSIS_ENABLED: ${AI_ANALYSIS_ENABLED:-true}
+      AI_PROVIDER: ${AI_PROVIDER:-offline}
+      AI_API_KEY: ${AI_API_KEY:-}
+    networks:
+      - certchain-network
+
+  # React Frontend (Nginx SPA)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: certchain-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - certchain-network
+
+networks:
+  certchain-network:
+    driver: bridge
+
+volumes:
+  certchain-mongo-data:
+    driver: local
