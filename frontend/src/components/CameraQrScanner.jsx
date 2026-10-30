@@ -39,10 +39,19 @@ export default function CameraQrScanner({ onScan, onClose }) {
   const [selectedCameraId, setSelectedCameraId] = useState("");
   const [scannerState, setScannerState] = useState("INITIALIZING"); // "INITIALIZING" | "SCANNING" | "ERROR" | "SUCCESS"
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSecure, setIsSecure] = useState(true);
 
   const scannerRef = useRef(null);
   const isStoppingRef = useRef(false);
+  const fileCaptureRef = useRef(null);
   const containerId = "qr-scanner-video-region";
+
+  // Check secure context
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsSecure(window.isSecureContext !== false);
+    }
+  }, []);
 
   // Stop scanning helper
   const stopScanner = useCallback(async () => {
@@ -58,6 +67,38 @@ export default function CameraQrScanner({ onScan, onClose }) {
       }
     }
   }, []);
+
+  // Handle photo capture / file scan
+  const handlePhotoCapture = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setScannerState("INITIALIZING");
+    setErrorMessage("");
+
+    try {
+      await stopScanner();
+      if (!scannerRef.current) {
+        scannerRef.current = new Html5Qrcode(containerId);
+      }
+
+      const decodedText = await scannerRef.current.scanFile(file, true);
+      if (decodedText) {
+        playBeep();
+        triggerHaptic();
+        setScannerState("SUCCESS");
+        if (onScan) {
+          onScan(decodedText);
+        }
+      }
+    } catch (err) {
+      console.warn("File scan error:", err);
+      setScannerState("ERROR");
+      setErrorMessage(
+        "Could not detect a clear QR code in that photo. Please position the camera closer to the QR code and try again."
+      );
+    }
+  };
 
   // Start scanning with a chosen camera / constraints
   const startScanning = useCallback(
@@ -232,11 +273,22 @@ export default function CameraQrScanner({ onScan, onClose }) {
         {scannerState === "ERROR" && (
           <div className="scanner-status-box">
             <span className="scanner-status-icon" aria-hidden="true">🚫</span>
-            <h4 className="scanner-status-title">Camera Unavailable</h4>
+            <h4 className="scanner-status-title">Live Video Unavailable</h4>
             <p className="scanner-status-desc">{errorMessage}</p>
-            <button type="button" className="scanner-retry-btn" onClick={handleRetry}>
-              🔄 Try Again
-            </button>
+
+            <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap", justifyContent: "center" }}>
+              <button
+                type="button"
+                className="scanner-retry-btn"
+                style={{ background: "#0284c7" }}
+                onClick={() => fileCaptureRef.current?.click()}
+              >
+                📸 Snap Photo of QR with Camera
+              </button>
+              <button type="button" className="scanner-retry-btn" onClick={handleRetry}>
+                🔄 Retry Live Camera
+              </button>
+            </div>
           </div>
         )}
 
@@ -247,6 +299,33 @@ export default function CameraQrScanner({ onScan, onClose }) {
             <p className="scanner-status-desc">Loading certificate details...</p>
           </div>
         )}
+      </div>
+
+      {/* Hidden file input with mobile native camera shutter */}
+      <input
+        ref={fileCaptureRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        style={{ display: "none" }}
+        onChange={handlePhotoCapture}
+        aria-label="Capture QR Code Photo"
+      />
+
+      <div className="camera-footer-bar">
+        {!isSecure && (
+          <p className="camera-insecure-advisory">
+            💡 <strong>Tip for mobile:</strong> Browsers require HTTPS for live video streaming on local IP. Tap below to snap directly with your phone camera:
+          </p>
+        )}
+
+        <button
+          type="button"
+          className="camera-snap-btn"
+          onClick={() => fileCaptureRef.current?.click()}
+        >
+          📸 Snap Photo with Mobile Camera / Pick Image
+        </button>
       </div>
     </div>
   );
