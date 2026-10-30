@@ -1,9 +1,20 @@
-const defaultHost =
-  typeof window !== "undefined" && window.location.hostname
-    ? window.location.hostname
-    : "localhost";
+const BACKEND_TUNNEL_URL =
+  "https://ant-approval-pct-photographers.trycloudflare.com/api";
 
-export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || `http://${defaultHost}:8080/api`;
+function resolveApiBaseUrl() {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  if (typeof window !== "undefined") {
+    if (window.location.hostname.includes("trycloudflare.com")) {
+      return BACKEND_TUNNEL_URL;
+    }
+    const host = window.location.hostname || "localhost";
+    return `http://${host}:8080/api`;
+  }
+  return "http://localhost:8080/api";
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
 
 export default API_BASE_URL;
