@@ -1,0 +1,234 @@
+/* ─────────────────────────────────────────────────────────────
+   Camera QR Scanner Component Styles
+   ───────────────────────────────────────────────────────────── */
+
+.camera-scanner-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg, 12px);
+  overflow: hidden;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.camera-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.camera-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+}
+
+.camera-title-icon {
+  font-size: 1.1rem;
+}
+
+.camera-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.camera-switch-select {
+  background: rgba(30, 41, 59, 0.8);
+  color: var(--text-secondary, #cbd5e1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  outline: none;
+  max-width: 160px;
+}
+
+.camera-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.camera-close-btn:hover {
+  color: #f87171;
+}
+
+.camera-viewport {
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  max-height: 420px;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* html5-qrcode video element styling */
+.camera-viewport video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+#qr-scanner-video-region {
+  width: 100% !important;
+  border: none !important;
+}
+
+#qr-scanner-video-region img {
+  display: none !important;
+}
+
+/* Overlay Reticle / Frame */
+.scanner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.scanner-frame {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+/* Corner highlights */
+.scanner-frame::before,
+.scanner-frame::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-color: #38bdf8;
+  border-style: solid;
+  pointer-events: none;
+}
+
+.scanner-frame::before {
+  top: 0;
+  left: 0;
+  border-width: 4px 0 0 4px;
+  border-top-left-radius: 12px;
+}
+
+.scanner-frame::after {
+  bottom: 0;
+  right: 0;
+  border-width: 0 4px 4px 0;
+  border-bottom-right-radius: 12px;
+}
+
+/* Laser scan animation */
+.scanner-laser {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(56, 189, 248, 0) 0%,
+    rgba(56, 189, 248, 1) 50%,
+    rgba(56, 189, 248, 0) 100%
+  );
+  box-shadow: 0 0 8px #38bdf8;
+  animation: laserSweep 2s ease-in-out infinite alternate;
+}
+
+@keyframes laserSweep {
+  0% {
+    top: 5%;
+  }
+  100% {
+    top: 95%;
+  }
+}
+
+.scanner-instructions {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 6px 14px;
+  margin: 0 20px;
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+/* Error / Loading States */
+.scanner-status-box {
+  padding: 40px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary, #cbd5e1);
+}
+
+.scanner-status-icon {
+  font-size: 2.2rem;
+}
+
+.scanner-status-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary, #f8fafc);
+}
+
+.scanner-status-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+.scanner-retry-btn {
+  margin-top: 8px;
+  background: var(--primary, #3b82f6);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.scanner-retry-btn:hover {
+  background: #2563eb;
+}
